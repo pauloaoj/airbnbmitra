@@ -25,6 +25,7 @@ const entityColorMap: Record<string, string> = {
   "entity-amenity": "#06b6d4",
   "entity-photo": "#ec4899",
   "entity-message": "#6366f1",
+  "entity-location": "#f97316",
 };
 
 const EntityNode = ({ data }: { data: { entity: typeof entities[0] } }) => {
@@ -85,17 +86,25 @@ const nodeTypes = {
 
 // Posições organizadas para melhor visualização
 const nodePositions: Record<string, { x: number; y: number }> = {
-  usuario: { x: 400, y: 0 },
+  usuario: { x: 500, y: 0 },
+  // Hierarquia de localização
+  pais: { x: -300, y: 0 },
+  estado: { x: -300, y: 150 },
+  cidade: { x: -300, y: 300 },
+  // Propriedade
   propriedade: { x: 100, y: 200 },
-  reserva: { x: 400, y: 400 },
-  avaliacao: { x: 700, y: 400 },
-  pagamento: { x: 400, y: 600 },
-  comodidade: { x: -200, y: 200 },
-  propriedade_comodidade: { x: -100, y: 400 },
-  foto: { x: 100, y: 500 },
-  mensagem: { x: 700, y: 200 },
-  lista_desejos: { x: 700, y: 0 },
-  item_lista_desejos: { x: 900, y: 200 },
+  reserva: { x: 500, y: 400 },
+  // Avaliações bidirecionais
+  avaliacao_propriedade: { x: 800, y: 350 },
+  avaliacao_hospede: { x: 800, y: 500 },
+  // Outros
+  pagamento: { x: 500, y: 620 },
+  comodidade: { x: -100, y: 500 },
+  propriedade_comodidade: { x: 100, y: 500 },
+  foto: { x: 100, y: 400 },
+  mensagem: { x: 800, y: 200 },
+  lista_desejos: { x: 800, y: 0 },
+  item_lista_desejos: { x: 1050, y: 150 },
 };
 
 export const DiagramView = () => {

@@ -3,8 +3,9 @@ import { Key, Link2, Circle } from "lucide-react";
 const entityColors = [
   { name: "Usuário", color: "entity-user" },
   { name: "Propriedade", color: "entity-property" },
+  { name: "Localização", color: "entity-location" },
   { name: "Reserva", color: "entity-booking" },
-  { name: "Avaliação", color: "entity-review" },
+  { name: "Avaliações", color: "entity-review" },
   { name: "Pagamento", color: "entity-payment" },
   { name: "Comodidade", color: "entity-amenity" },
   { name: "Mensagem", color: "entity-message" },
