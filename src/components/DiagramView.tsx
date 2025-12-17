@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   ReactFlow,
   Node,
@@ -14,7 +14,9 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { entities, relationships } from "@/data/airbnbSchema";
-import { Key, Link } from "lucide-react";
+import { Key, Link, Download } from "lucide-react";
+import { toPng } from "html-to-image";
+import { Button } from "@/components/ui/button";
 
 const entityColorMap: Record<string, string> = {
   "entity-user": "#3b82f6",
@@ -108,6 +110,8 @@ const nodePositions: Record<string, { x: number; y: number }> = {
 };
 
 export const DiagramView = () => {
+  const flowRef = useRef<HTMLDivElement>(null);
+
   const initialNodes: Node[] = useMemo(() => {
     return entities.map((entity) => ({
       id: entity.tableName,
@@ -145,29 +149,64 @@ export const DiagramView = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  const handleExportPng = useCallback(() => {
+    if (flowRef.current === null) return;
+
+    const flowElement = flowRef.current.querySelector('.react-flow') as HTMLElement;
+    if (!flowElement) return;
+
+    toPng(flowElement, {
+      backgroundColor: '#1a1a2e',
+      pixelRatio: 3,
+      filter: (node) => {
+        // Exclude minimap and controls from export
+        if (node?.classList?.contains('react-flow__minimap')) return false;
+        if (node?.classList?.contains('react-flow__controls')) return false;
+        return true;
+      },
+    })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'diagrama-er-airbnb.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error('Erro ao exportar imagem:', err);
+      });
+  }, []);
+
   return (
-    <div className="w-full h-[700px] rounded-lg border border-border overflow-hidden bg-background">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        nodeTypes={nodeTypes}
-        fitView
-        minZoom={0.3}
-        maxZoom={1.5}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
-      >
-        <Background color="hsl(var(--muted-foreground))" gap={20} size={1} />
-        <Controls className="!bg-card !border-border" />
-        <MiniMap
-          nodeColor={(node) => {
-            const entity = entities.find((e) => e.tableName === node.id);
-            return entity ? entityColorMap[entity.color] || "#6b7280" : "#6b7280";
-          }}
-          className="!bg-card !border-border"
-        />
-      </ReactFlow>
+    <div className="w-full space-y-3">
+      <div className="flex justify-end">
+        <Button onClick={handleExportPng} variant="outline" size="sm">
+          <Download className="w-4 h-4 mr-2" />
+          Exportar PNG
+        </Button>
+      </div>
+      <div ref={flowRef} className="w-full h-[700px] rounded-lg border border-border overflow-hidden bg-background">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          fitView
+          minZoom={0.3}
+          maxZoom={1.5}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
+        >
+          <Background color="hsl(var(--muted-foreground))" gap={20} size={1} />
+          <Controls className="!bg-card !border-border" />
+          <MiniMap
+            nodeColor={(node) => {
+              const entity = entities.find((e) => e.tableName === node.id);
+              return entity ? entityColorMap[entity.color] || "#6b7280" : "#6b7280";
+            }}
+            className="!bg-card !border-border"
+          />
+        </ReactFlow>
+      </div>
     </div>
   );
 };
