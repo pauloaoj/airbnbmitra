@@ -45,6 +45,7 @@
     --entity-amenity: 174 72% 40%;
     --entity-message: 328 81% 60%;
     --entity-photo: 24 95% 53%;
+    --entity-location: 24 95% 53%;
 
     /* Grid pattern */
     --grid-color: 217 33% 18%;
@@ -105,6 +106,10 @@
 
 .entity-glow-photo {
   box-shadow: 0 0 30px -5px hsl(var(--entity-photo) / 0.3);
+}
+
+.entity-glow-location {
+  box-shadow: 0 0 30px -5px hsl(var(--entity-location) / 0.3);
 }
 
 /* Smooth scrolling */
