@@ -114,6 +114,21 @@ export const entities: Entity[] = [
     ],
   },
   {
+    name: "Disponibilidade Propriedade",
+    tableName: "disponibilidade_propriedade",
+    color: "entity-property",
+    glowClass: "entity-glow-property",
+    description: "Calendário de disponibilidade e preços customizados por data",
+    attributes: [
+      { name: "id", type: "UUID", isPrimaryKey: true, description: "Identificador único" },
+      { name: "propriedade_id", type: "UUID", isForeignKey: true, references: "propriedade.id", description: "ID da propriedade" },
+      { name: "data", type: "DATE", description: "Data específica" },
+      { name: "esta_disponivel", type: "BOOLEAN", description: "Disponível para reserva?" },
+      { name: "preco_customizado", type: "DECIMAL(10,2)", nullable: true, description: "Preço customizado para esta data" },
+      { name: "noite_minima_customizada", type: "INTEGER", nullable: true, description: "Mínimo de noites customizado" },
+    ],
+  },
+  {
     name: "Reserva",
     tableName: "reserva",
     color: "entity-booking",
@@ -296,6 +311,8 @@ export const relationships: Relationship[] = [
   // Pagamento
   { from: "reserva", to: "pagamento", fromCardinality: "1", toCardinality: "1", label: "tem" },
   { from: "usuario", to: "pagamento", fromCardinality: "1", toCardinality: "N", label: "paga" },
+  // Disponibilidade
+  { from: "propriedade", to: "disponibilidade_propriedade", fromCardinality: "1", toCardinality: "N", label: "define" },
   // Fotos e comodidades
   { from: "propriedade", to: "foto", fromCardinality: "1", toCardinality: "N", label: "possui" },
   { from: "propriedade", to: "propriedade_comodidade", fromCardinality: "1", toCardinality: "N", label: "tem" },

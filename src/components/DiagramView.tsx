@@ -93,8 +93,9 @@ const nodePositions: Record<string, { x: number; y: number }> = {
   pais: { x: -300, y: 0 },
   estado: { x: -300, y: 150 },
   cidade: { x: -300, y: 300 },
-  // Propriedade
+  // Propriedade e disponibilidade
   propriedade: { x: 100, y: 200 },
+  disponibilidade_propriedade: { x: -100, y: 200 },
   reserva: { x: 500, y: 400 },
   // Avaliações bidirecionais
   avaliacao_propriedade: { x: 800, y: 350 },
